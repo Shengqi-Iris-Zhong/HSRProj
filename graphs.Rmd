@@ -1,0 +1,61 @@
+---
+title: "Graphs"
+author: "Shengqi(Iris) Zhong"
+date: "2/27/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggthemes)
+library(viridis)
+```
+
+
+## Funding ~ Population
+
+```{r pop dataset}
+population <- c("elder","female","veteran","young","racial/ethnic minorities","other")
+funding <- c(62863139,25599713,1430958,31147220,75359572,56361206)
+pop_dataset <- data.frame(population,funding)
+
+pop_dataset$population <- factor(pop_dataset$population, c("racial/ethnic minorities", "elder", "young", "female","veteran","other"))
+```
+
+```{r pop plot}
+ggplot(pop_dataset,aes(x=population,y=funding))+
+  geom_bar(stat="identity",
+           aes(fill=funding))+
+  geom_text(aes(label=funding), vjust=-0.3, size=3.5)+
+  theme_minimal()+
+  scale_fill_viridis(begin=0.8,end=0.2)+
+  labs(title="Graph 1. Funding Distribution",
+       x="Population",
+       y="Total funding ($)")+
+  theme(legend.position="none")
+```
+
+## Count ~ Research Priorities
+
+```{r priorities dataset}
+research <- c("outcome assessment","complications","self care","prevention & control")
+count <- c(124,94,67,57)
+research_dataset <- data.frame(research,count)
+research_dataset <- research_dataset %>%
+  mutate(research = fct_reorder(research, desc(count)))
+```
+
+```{r priorities plot}
+ggplot(research_dataset,aes(x=research,y=count))+
+  geom_bar(stat="identity",
+           aes(fill=count))+
+  geom_text(aes(label=count), vjust=-0.3, size=3.5)+
+  theme_minimal()+
+  scale_fill_viridis(begin=0.5,end=0)+
+  labs(title="Graph 2. Research Priorities",
+       x="Keywords",
+       y="Number of Research")+
+  theme(legend.position="none")
+```
+
